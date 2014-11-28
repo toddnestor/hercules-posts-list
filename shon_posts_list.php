@@ -46,7 +46,7 @@ if( !function_exists("ShonsBottomOfPosts"))
 				
 				$category_list .= '<h2><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h2>';
 				//$category_list .= '<p>' . get_the_content() . '</p>'; //this line would put the content on the page
-				//$category_list .= '<p>' . get_the_content() . '</p>'; //this line would put the contentz on the page
+				$category_list .= '<p>' . get_the_content() . ' <a href="' . get_the_permalink() . '">Read more</a></p>'; //this line would put the contentz on the page
 			
 			endwhile;
 		
