@@ -46,7 +46,7 @@ if( !function_exists("ShonsBottomOfPosts"))
 				
 				$category_list .= '<h2><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h2>';
 				//$category_list .= '<p>' . get_the_content() . '</p>'; //this line would put the content on the page
-				$category_list .= '<p>' . get_the_content() . ' <a href="' . get_the_permalink() . '">Read more</a></p>'; //this line would put the contentz on the page
+				$category_list .= '<p>' . get_the_excerpt() . ' <a href="' . get_the_permalink() . '">Read more</a></p>'; //this line would put the contentz on the page
 			
 			endwhile;
 		
@@ -194,26 +194,27 @@ $create_instance = new ShonsPostsList();
 					}
 				</style>
 				<?php
-				foreach ($options as $option) {
-			$callback = 'PostCategoriesUI'.$option['type'];
+				foreach ($options as $option)
+				{
+					$callback = 'PostCategoriesUI'.$option['type'];
 				?>
-			<div class="section" id="<?php echo str_replace(array('[',']'),array('_','_'),$option['name']);?>">
-				<div class="row-fluid">
-						<div class="span4">
-					<h3><?php echo $option['text']; ?></h3>
-					<div class="desc">
-							<?php echo $option['hint']; ?>
+					<div class="section" id="<?php echo str_replace(array('[',']'),array('_','_'),$option['name']);?>">
+						<div class="row-fluid">
+								<div class="span4">
+							<h3><?php echo $option['text']; ?></h3>
+							<div class="desc">
+									<?php echo $option['hint']; ?>
+							</div>
+								</div>
+								<div class="span7 offset1">
+								<?php
+									$this->$callback($option);
+								?>
+								</div>
+						</div>
 					</div>
-						</div>
-						<div class="span7 offset1">
-						<?php
-					$this->$callback($option);
-						?>
-						</div>
-				</div>
-			</div>
-				<?php
-					}
+			<?php
+				}
 			?>
 	
 			<?php
