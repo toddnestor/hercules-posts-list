@@ -18,6 +18,15 @@ if( !function_exists("ShonsBottomOfPosts"))
 	/*	add our filter function to the hook */
 	add_filter('the_content', 'ShonsBottomOfPosts');
 	
+	function limit_text($text, $limit) {
+		if (str_word_count($text, 0) > $limit) {
+				$words = str_word_count($text, 2);
+				$pos = array_keys($words);
+				$text = substr($text, 0, $pos[$limit]) . '...';
+		}
+		return $text;
+	}
+	
 	function ShonsBottomOfPosts( $content )
 	{
 		global $post;
@@ -31,11 +40,11 @@ if( !function_exists("ShonsBottomOfPosts"))
 		
 		$posts_per_page = isset( $custom['custom_category_posts_per_page'][0] ) && is_numeric( $custom['custom_category_posts_per_page'][0] ) ? $custom['custom_category_posts_per_page'][0] : 10;
 		
-		$offset = $posts_per_page * ( $page - 1 );
+		$page = isset( $_GET['pg'] ) && is_numeric( $_GET['pg'] ) ? $_GET['pg'] : 1;
 		
 		$args = array(
 			'cat'									=>	$category_id,
-			'paged'								=>	isset( $_GET['pg'] ) && is_numeric( $_GET['pg'] ) ? $_GET['pg'] : 1,
+			'paged'								=>	$page,
 			'posts_per_page'			=> ( $posts_per_page > 0 ? $posts_per_page : -1 ),
 		);
 		
@@ -45,11 +54,13 @@ if( !function_exists("ShonsBottomOfPosts"))
 		
 		if ( $shons_query->have_posts() ):
 		
+		if( $page > $shons_query->max_num_pages ) $page = $shons_query->max_num_pages;
+		
 		$pagination = array(
 						'base' => @add_query_arg('pg', '%#%'),
 						'format' => '',
 						'total' => $shons_query->max_num_pages,
-						'current' => isset( $_GET['pg'] ) && is_numeric( $_GET['pg'] ) ? $_GET['pg'] : 1,
+						'current' => $page,
 						'prev_next' => true,
 						'prev_text' => 'Prev',
 						'next_text' => 'Next',
@@ -59,7 +70,7 @@ if( !function_exists("ShonsBottomOfPosts"))
 						'type' => 'plain'
 				);
 		
-		$pagination_links = paginate_links($pagination);
+		$pagination_links = paginate_links( $pagination );
 		
 		$category_list .= $pagination_links;
 		
@@ -69,7 +80,9 @@ if( !function_exists("ShonsBottomOfPosts"))
 				
 				$category_list .= '<h2><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h2>';
 				
-				$category_list .= !isset( $custom['custom_category_excerpt_toggle'][0] ) || $custom['custom_category_excerpt_toggle'][0] == 'true' ? '<p>' . get_the_excerpt() . ' <a href="' . get_the_permalink() . '">Read more</a></p>' : '';
+				$excerpt = isset( $custom['custom_category_excerpt_length'][0] ) && is_numeric( $custom['custom_category_excerpt_length'][0] ) && $custom['custom_category_excerpt_length'][0] > 0 ? limit_text( get_the_excerpt(), $custom['custom_category_excerpt_length'][0] ) : get_the_excerpt();
+				
+				$category_list .= !isset( $custom['custom_category_excerpt_toggle'][0] ) || $custom['custom_category_excerpt_toggle'][0] == 'true' ? '<p>' . $excerpt . ' <a href="' . get_the_permalink() . '">Read more</a></p>' : '';
 			
 			endwhile;
 		
@@ -145,6 +158,13 @@ $create_instance = new ShonsPostsList();
 							'text'	=> 'Show excerpt',
 							'value'	=> $values['custom_category_excerpt_toggle'],
 						),
+						array(
+							'type'	=> 'numberbox',
+							'id'		=> 'custom_category_excerpt_length',
+							'name'	=> 'custom_category_excerpt_length',
+							'text'	=> 'Excerpt max length (in words) <br> (use 0 to show full excerpt)',
+							'value'	=> $values['custom_category_excerpt_length'],
+						),
 				) );
 			
 				echo '</div>';
@@ -173,6 +193,7 @@ $create_instance = new ShonsPostsList();
 									'custom_category_toggle' 					=> 'false',
 									'custom_category_excerpt_toggle' 	=> 'true',
 									'custom_category_posts_per_page' 	=> 0,
+									'custom_category_excerpt_length'	=> 0
 							);
 							break;
 						}
@@ -207,6 +228,7 @@ $create_instance = new ShonsPostsList();
 						update_post_meta($post_id, 'custom_category_toggle', $this->PostCategoriesGlobalsStripCrl($_POST['custom_category_toggle']));
 						update_post_meta($post_id, 'custom_category_excerpt_toggle', $this->PostCategoriesGlobalsStripCrl($_POST['custom_category_excerpt_toggle']));
 						update_post_meta($post_id, 'custom_category_posts_per_page', $this->PostCategoriesGlobalsStripCrl($_POST['custom_category_posts_per_page']));
+						update_post_meta($post_id, 'custom_category_excerpt_length', $this->PostCategoriesGlobalsStripCrl($_POST['custom_category_excerpt_length']));
 				}
 			}
 	
