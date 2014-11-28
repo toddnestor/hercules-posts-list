@@ -66,8 +66,8 @@ $create_instance = new ShonsPostsList();
 	{
 		function __construct()
 		{
-			add_action('add_meta_boxes', array( $this, 'author_plugin_metabox_add_meta_boxes'));
-			add_action('save_post', array( $this, 'author_plugin_metabox_save_post'), 10, 1);
+			add_action('add_meta_boxes', array( $this, 'PostCategoriesMetaboxAddMetabox'));
+			add_action('save_post', array( $this, 'PostCategoriesMetaboxSavePost'), 10, 1);
 		}
     function GetTheCategoryArray(  )
 		{
@@ -151,14 +151,14 @@ $create_instance = new ShonsPostsList();
 	
 			/* this function actually adds the metaboxes to the approriate areas, we are adding it to pages and posts, see the WordPress documentation
 			 * for more information about the add_meta_box function */
-			function author_plugin_metabox_add_meta_boxes() {
+			function PostCategoriesMetaboxAddMetabox() {
 				add_meta_box('metabox_postcategories', 'Display Post List on Bottom', array($this,'PostCategoriesMetabox'), 'page','side','high');
 			}
 	
 			/* this function takes all of our form fields and saves them when the post/page is saved, or updates them if need be
 			 * currently it is not very dynamic, we have to update each field using static code from here, that will need fixed in
 			 * the future to make this code more flexible */
-			function author_plugin_metabox_save_post($post_id) {
+			function PostCategoriesMetaboxSavePost($post_id) {
 				if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )  {
 						return;
 				}
