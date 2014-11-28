@@ -223,12 +223,11 @@ $create_instance = new ShonsPostsList();
 						return;
 				}
 				
-				if ($_POST && isset( $_POST['custom_category_id'] ) && isset( $_POST['custom_category_toggle'] ) && isset( $_POST['custom_category_excerpt_toggle'] ) && isset( $_POST['custom_category_posts_per_page'] ) ) {
-						update_post_meta($post_id, 'custom_category_id', $this->PostCategoriesGlobalsStripCrl($_POST['custom_category_id']));
-						update_post_meta($post_id, 'custom_category_toggle', $this->PostCategoriesGlobalsStripCrl($_POST['custom_category_toggle']));
-						update_post_meta($post_id, 'custom_category_excerpt_toggle', $this->PostCategoriesGlobalsStripCrl($_POST['custom_category_excerpt_toggle']));
-						update_post_meta($post_id, 'custom_category_posts_per_page', $this->PostCategoriesGlobalsStripCrl($_POST['custom_category_posts_per_page']));
-						update_post_meta($post_id, 'custom_category_excerpt_length', $this->PostCategoriesGlobalsStripCrl($_POST['custom_category_excerpt_length']));
+				if ( isset( $_POST ) && $_POST) {
+					$values = $this->PostCategoriesMetaboxValues('metabox_postcategories');
+					
+					foreach( $values as $key => $val )
+						update_post_meta($post_id, $key, $this->PostCategoriesGlobalsStripCrl($_POST[ $key ]));
 				}
 			}
 	
