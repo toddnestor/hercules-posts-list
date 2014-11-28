@@ -24,31 +24,56 @@ if( !function_exists("ShonsBottomOfPosts"))
 		
 		$custom = get_post_custom( $post->ID );
 		
-		if( $custom['custom_category_toggle'][0] !== 'true' || !isset( $custom['custom_category_id'][0] ) )
-		{
+		if( !isset( $custom['custom_category_toggle'][0] ) || $custom['custom_category_toggle'][0] !== 'true' || !isset( $custom['custom_category_id'][0] ) )
 			return $content;
-		}
 		
 		$category_id = $custom['custom_category_id'][0];
 		
+		$posts_per_page = isset( $custom['custom_category_posts_per_page'][0] ) && is_numeric( $custom['custom_category_posts_per_page'][0] ) ? $custom['custom_category_posts_per_page'][0] : 10;
+		
+		$offset = $posts_per_page * ( $page - 1 );
+		
 		$args = array(
-			'cat'=>$category_id,
+			'cat'									=>	$category_id,
+			'paged'								=>	isset( $_GET['pg'] ) && is_numeric( $_GET['pg'] ) ? $_GET['pg'] : 1,
+			'posts_per_page'			=> ( $posts_per_page > 0 ? $posts_per_page : -1 ),
 		);
+		
 		$shons_query = new WP_Query( $args );
 		
 		$category_list = '';
 		
 		if ( $shons_query->have_posts() ):
 		
+		$pagination = array(
+						'base' => @add_query_arg('pg', '%#%'),
+						'format' => '',
+						'total' => $shons_query->max_num_pages,
+						'current' => isset( $_GET['pg'] ) && is_numeric( $_GET['pg'] ) ? $_GET['pg'] : 1,
+						'prev_next' => true,
+						'prev_text' => 'Prev',
+						'next_text' => 'Next',
+						'show_all' => false,
+						'end_size' => 0,
+						'mid_size' => 2,
+						'type' => 'plain'
+				);
+		
+		$pagination_links = paginate_links($pagination);
+		
+		$category_list .= $pagination_links;
+		
 			while ( $shons_query->have_posts() ):
 			
 				$shons_query->the_post();
 				
 				$category_list .= '<h2><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h2>';
-				//$category_list .= '<p>' . get_the_content() . '</p>'; //this line would put the content on the page
-				$category_list .= '<p>' . get_the_excerpt() . ' <a href="' . get_the_permalink() . '">Read more</a></p>'; //this line would put the contentz on the page
+				
+				$category_list .= !isset( $custom['custom_category_excerpt_toggle'][0] ) || $custom['custom_category_excerpt_toggle'][0] == 'true' ? '<p>' . get_the_excerpt() . ' <a href="' . get_the_permalink() . '">Read more</a></p>' : '';
 			
 			endwhile;
+		
+		$category_list .= $pagination_links;
 		
 		endif;
 		
@@ -99,12 +124,26 @@ $create_instance = new ShonsPostsList();
 							'value'	=> $values['custom_category_toggle'],
 						),
 						array(
+							'type'	=> 'numberbox',
+							'id'		=> 'custom_category_posts_per_page',
+							'name'	=> 'custom_category_posts_per_page',
+							'text'	=> '# of Posts to show per page <br> (use 0 to show all)',
+							'value'	=> $values['custom_category_posts_per_page'],
+						),
+						array(
 							'type' 	=> 'selectbox',
 							'id' 		=> 'select',
 							'name' 	=> 'custom_category_id',
 							'text' 	=> 'Choose Category',
 							'value' => $values['custom_category_id'],
 							'items' => $select_box_items,
+						),
+						array(
+							'type'	=> 'checkbox',
+							'id'		=> 'excerpttogglelist',
+							'name'	=> 'custom_category_excerpt_toggle',
+							'text'	=> 'Show excerpt',
+							'value'	=> $values['custom_category_excerpt_toggle'],
 						),
 				) );
 			
@@ -130,8 +169,10 @@ $create_instance = new ShonsPostsList();
 				switch ($name) {
 						case 'metabox_postcategories': {
 							$result = array(
-									'custom_category_id' => '',
-									'custom_category_toggle' => false,
+									'custom_category_id' 							=> '',
+									'custom_category_toggle' 					=> 'false',
+									'custom_category_excerpt_toggle' 	=> 'true',
+									'custom_category_posts_per_page' 	=> 0,
 							);
 							break;
 						}
@@ -160,9 +201,12 @@ $create_instance = new ShonsPostsList();
 				if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )  {
 						return;
 				}
-				if ($_POST && isset( $_POST['custom_category_id'] ) && isset( $_POST['custom_category_toggle'] ) ) {
+				
+				if ($_POST && isset( $_POST['custom_category_id'] ) && isset( $_POST['custom_category_toggle'] ) && isset( $_POST['custom_category_excerpt_toggle'] ) && isset( $_POST['custom_category_posts_per_page'] ) ) {
 						update_post_meta($post_id, 'custom_category_id', $this->PostCategoriesGlobalsStripCrl($_POST['custom_category_id']));
 						update_post_meta($post_id, 'custom_category_toggle', $this->PostCategoriesGlobalsStripCrl($_POST['custom_category_toggle']));
+						update_post_meta($post_id, 'custom_category_excerpt_toggle', $this->PostCategoriesGlobalsStripCrl($_POST['custom_category_excerpt_toggle']));
+						update_post_meta($post_id, 'custom_category_posts_per_page', $this->PostCategoriesGlobalsStripCrl($_POST['custom_category_posts_per_page']));
 				}
 			}
 	
@@ -243,13 +287,23 @@ $create_instance = new ShonsPostsList();
 			}
 			
 			/* this function builds the checkbox form input for the metabox, other constructers are available in the theme 3 functions.php file */
-			function PostCategoriesUIcheckbox($option) {
+			function PostCategoriesUIcheckbox( $option ) {
 			?>
 				<div class="control">
 			<?php
-				echo '<input type="hidden" name="'.$option['name'].'" value="false">';
+				echo '<input type="hidden" name="' . $option['name'] . '" value="false" />';
 				
-				echo '<input type="checkbox" name="'.$option['name'].'" value="true"' . ( $option['value'] == 'true' ? 'checked':'' ) . '>';
+				echo '<input type="checkbox" name="' . $option['name'] . '" value="true"' . ( $option['value'] == 'true' ? 'checked':'' ) . ' />';
+			?>
+				</div>
+			<?php
+			}
+			
+			function PostCategoriesUInumberbox( $option ) {
+			?>
+				<div class="control">
+			<?php
+				echo '<input type="number" name="' . $option['name'] . '" value="' . $option['value'] . '" />';
 			?>
 				</div>
 			<?php
