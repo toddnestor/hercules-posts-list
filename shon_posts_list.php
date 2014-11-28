@@ -52,11 +52,9 @@ if( !function_exists("ShonsBottomOfPosts"))
 		
 		endif;
 		
-		return $content . $category_list;
-		
 		wp_reset_postdata();
 		
-		return $content;
+		return $content . $category_list;
 	}
 }
 
