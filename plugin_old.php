@@ -1,11 +1,4 @@
 <?php
-/*
-Plugin Name: Shon's Posts List
-Description: Adds a list of posts in a category to the bottom of a page with a title of the same name as the category
-Version: 1.0
-License: GNU General Public License v3 or later
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
-*/
 
 // Exit if accessed directly
 if (!defined('ABSPATH')) {
@@ -13,19 +6,12 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-if( !function_exists("ShonsBottomOfPosts"))
+if( !function_exists("ShonsBottomOfPosts") )
 {
 	/*	add our filter function to the hook */
 	add_filter('the_content', 'ShonsBottomOfPosts');
 	
-	function limit_text($text, $limit) {
-		if (str_word_count($text, 0) > $limit) {
-				$words = str_word_count($text, 2);
-				$pos = array_keys($words);
-				$text = substr($text, 0, $pos[$limit]) . '...';
-		}
-		return $text;
-	}
+
 	
 	function ShonsBottomOfPosts( $content )
 	{

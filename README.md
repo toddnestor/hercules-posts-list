@@ -1,4 +1,4 @@
-shonspostcategories
+Hercules Posts List
 ===================
 
 This is a WordPress plugin that let's you display links to all the posts in a certain category at the bottom of a page.
