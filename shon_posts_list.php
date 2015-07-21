@@ -219,11 +219,11 @@ $create_instance = new ShonsPostsList();
 			 * currently it is not very dynamic, we have to update each field using static code from here, that will need fixed in
 			 * the future to make this code more flexible */
 			function PostCategoriesMetaboxSavePost($post_id) {
-				if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )  {
-						return;
-				}
+				if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+					return;
 				
-				if ( isset( $_POST ) && $_POST) {
+				if ( isset( $_POST ) && $_POST)
+				{
 					$values = $this->PostCategoriesMetaboxValues('metabox_postcategories');
 					
 					foreach( $values as $key => $val )
