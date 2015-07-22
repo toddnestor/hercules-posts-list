@@ -16,9 +16,17 @@ class HercHelper_Handlebars extends HercHelper
 {
     function __construct()
     {
-        //add_filter( 'the_content', array( $this, 'TestingIt' ) );
+
     }
 
+    /**
+     * Returns an instance of the Handlebars class.
+     *
+     * Initiates an instance of the Handlebars class if need be and returns it, or returns a previously
+     * instantiated Handlebars object.
+     *
+     * @return Handlebars Instance of the Handlebars class
+     */
     function Initialize()
     {
         if( empty( $this->handlebars_object ) )
@@ -29,18 +37,17 @@ class HercHelper_Handlebars extends HercHelper
         return $this->handlebars_object;
     }
 
-    function TestingIt()
+    /**
+     * Returns a compiled template using the Handlebars class.
+     * @param String $template A Handlebars template.
+     * @param Array $data Array of data to be used by Handlebars to render the template.
+     * @return String Compiled Handlebars template.
+     */
+    function Render( $template, $data=array() )
     {
         return $this->Initialize()->render(
-            'Planets:<br />{{#each planets}}<h6>{{this}}</h6>{{/each}}',
-            array(
-                'planets' => array(
-                    "Mercury",
-                    "Venus",
-                    "Earth",
-                    "Mars"
-                )
-            )
+            $template,
+            $data
         );
     }
 }

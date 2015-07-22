@@ -1,6 +1,6 @@
 <?php
 
-class HercController
+class HercController extends HercAbstract
 {
     function __construct()
     {

@@ -6,7 +6,7 @@
  * Time: 2:29 PM
  */
 
-class HercModel
+class HercModel extends HercAbstract
 {
     function __construct()
     {

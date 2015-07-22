@@ -1,5 +1,5 @@
 <?php
-class HercHelper extends HercFramework
+class HercHelper extends HercAbstract
 {
     function __construct()
     {
