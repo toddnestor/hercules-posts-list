@@ -117,6 +117,12 @@ class HercFramework
         return $this->$object;
     }
 
+    /**
+     * This function goes through all the objects in the framework and the main plugin it is used in and creates an instance of each one.
+     *
+     * This function ensures any code that needs to be run at initiation gets run.  So you can do an add_action or
+     * add_filter in the constructor of any object.
+     */
     function InitiateAll()
     {
         $object_types = array(
