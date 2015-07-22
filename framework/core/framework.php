@@ -10,8 +10,6 @@ class HercFramework
 {
     function __construct()
     {
-        $this->main_prefix = 'Herc';
-
         $this->InitiateAll();
     }
 
@@ -101,14 +99,14 @@ class HercFramework
 
         require_once( $file );
 
-        if( file_exists( dirname( dirname( dirname( __FILE__ ) ) ) . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $class . '.php' ) )
-            require_once( dirname( dirname( dirname( __FILE__ ) ) ) . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $class . '.php' );
-        elseif( file_exists( dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $class . '.php' ) )
-            require_once( dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $class . '.php' );
+        if( file_exists( dirname( dirname( dirname( __FILE__ ) ) ) . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $class . DIRECTORY_SEPARATOR . $class . '.php' ) )
+            require_once( dirname( dirname( dirname( __FILE__ ) ) ) . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $class . DIRECTORY_SEPARATOR . $class . '.php' );
+        elseif( file_exists( dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $class . DIRECTORY_SEPARATOR . $class . '.php' ) )
+            require_once( dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $class . DIRECTORY_SEPARATOR . $class . '.php' );
         else
             return false;
 
-        $object = $this->main_prefix . $class_prefix . '_' . $this->UpperCamelCaseIt( $class );
+        $object = 'Herc' . $class_prefix . '_' . $this->UpperCamelCaseIt( $class );
 
         if( $new )
             return new $object;
@@ -143,8 +141,8 @@ class HercFramework
 
                     foreach( $files as $key3=>$val3 )
                     {
-                        if( strpos( $val3, '.php' ) !== false )
-                            $this->InitiateClass( $val, str_replace( '.php', '', $val3 ) );
+                        if( strpos( $val3, '.' ) === false )
+                            $this->InitiateClass( $val, $val3 );
                     }
                 }
             }

@@ -10,9 +10,17 @@ class HercHelper_Tools extends HercHelper
 {
     function __construct()
     {
-        add_filter( 'the_content', function() { global $herc_posts; $herc_posts->Helper( 'tools' )->DebugIt( 'does it work?', 'I think it does!', array( 1, 2, 3, 4 ) ); } );
+        add_filter( 'the_content', array( $this, 'Testing' ) );
     }
 
+    function Testing()
+    {
+        $this->DebugIt( $this->Helper( 'handlebars' )->TestingIt() );
+    }
+
+    /**
+     *
+     */
     function DebugIt()
     {
         $args = func_get_args();
