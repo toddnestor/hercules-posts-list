@@ -59,7 +59,7 @@ abstract class HercAbstract
 
     function UpperCamelCaseIt( $string )
     {
-        return str_replace( ' ', '', ucwords( str_replace( '-', ' ', $string ) ) );
+        return str_replace( ' ', '', ucwords( str_replace( array( '_', '-' ), ' ', $string ) ) );
     }
 
     /**
@@ -115,5 +115,23 @@ abstract class HercAbstract
             $this->$object = new $object;
 
         return $this->$object;
+    }
+
+    function GetUrl( $file = '' )
+    {
+        return plugins_url( $this->GetPluginFolderName() . '/' . $file, $this->GetPluginDirectory() );
+    }
+
+    function GetPluginDirectory()
+    {
+        return dirname( dirname( dirname( __FILE__ ) ) );
+    }
+
+    function GetPluginFolderName()
+    {
+        $plugin_folder = $this->GetPluginDirectory();
+        $folder_bits = explode( DIRECTORY_SEPARATOR, $plugin_folder );
+
+        return array_pop( $folder_bits );
     }
 }

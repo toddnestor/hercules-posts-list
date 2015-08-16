@@ -20,6 +20,27 @@ class HercView extends HercAbstract
         }
     }
 
+    function EnqueueScript( $script )
+    {
+
+    }
+
+    function EnqueueStyleSheet( $style, $handle = '' )
+    {
+        wp_enqueue_style( ( empty( $handle ) ? __CLASS__ . '_' . sanitize_title( $style ) : $handle ), $this->GetUrl( $style ) );
+    }
+
+    function EnqueueBootstrap()
+    {
+        $this->EnqueueStyleSheet( 'framework/assets/css/bootstrap.css', sanitize_title( $this->GetPluginFolderName() . '_bootstrap' ) );
+    }
+
+    function IncludeBootstrap()
+    {
+        add_action( 'wp_enqueue_scripts', array( $this, 'EnqueueBootstrap' ) );
+        add_action( 'admin_print_styles', array( $this, 'EnqueueBootstrap' ) );
+    }
+
     function RegisterMetaboxes()
     {
         foreach( $this->metabox_positions as $key=>$val )
@@ -39,8 +60,6 @@ class HercView extends HercAbstract
     function Initialize()
     {
         if( $this->type = 'metabox' && !empty( $this->metabox_positions ) )
-        {
             add_action( 'add_meta_boxes', array( $this, 'RegisterMetaboxes' ) );
-        }
     }
 }

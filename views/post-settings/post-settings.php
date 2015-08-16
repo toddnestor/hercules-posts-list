@@ -20,6 +20,8 @@ class HercView_PostSettings extends HercView
             ),
         );
 
+        $this->IncludeBootstrap();
+
         parent::__construct();
     }
 }
