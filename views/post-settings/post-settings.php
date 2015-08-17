@@ -22,6 +22,27 @@ class HercView_PostSettings extends HercView
 
         $this->IncludeBootstrap();
 
+        $this->data = array(
+            'categories' => $this->GetTheCategoryArray()
+        );
+
         parent::__construct();
+    }
+
+    function GetTheCategoryArray()
+    {
+        $select_box_options = array();
+
+        $category_list = get_categories(array());
+
+        foreach ($category_list as $key => $val)
+        {
+            $select_box_options[] = array(
+                'id' => $val->term_id,
+                'name' => $val->name . ' (' . $val->count . ')'
+            );
+        }
+
+        return $select_box_options;
     }
 }

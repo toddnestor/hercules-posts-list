@@ -12,7 +12,6 @@
     <div class="form-group">
         <label for="posts_to_show">Choose Category</label>
         <select class="form-control" id="post_category">
-            <option>test</option>
             {{#each categories}}
             <option value="{{this.id}}">{{this.name}}</option>
             {{/each}}

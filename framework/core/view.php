@@ -16,7 +16,7 @@ class HercView extends HercAbstract
         {
             $template = file_get_contents($this->directory . DIRECTORY_SEPARATOR . $this->template);
 
-            echo $this->Helper( 'handlebars' )->Render( $template );
+            echo $this->Helper( 'handlebars' )->Render( $template, ( !empty( $this->data ) ? $this->data : array() ) );
         }
     }
 
