@@ -13,15 +13,23 @@ class HercModel extends HercAbstract
         $this->class_name = empty( $this->class_name ) ? __CLASS__ : $this->class_name;
     }
 
-    function RegisterPostMetaSave()
+    function RegisterPostMetaSave( $post_id )
     {
-        $this->Helper( 'tools' )->DebugIt( 'your mom!' );
+        if( !empty( $_POST[ $this->class_name ] ) )
+            if( is_array( $_POST[ $this->class_name ] ) )
+                update_post_meta( $post_id, $this->class_name, serialize( $_POST[ $this->class_name ] ) );
+            else
+                update_post_meta( $post_id, $this->class_name, $_POST[ $this->class_name ] );
     }
 
     function Initialize()
     {
-        //$this->Helper( 'tools' )->DebugIt( $this->CurrentSlug() );
-        if( $this->View( $this->CurrentSlug() )->type == 'metabox' && !empty( $this->metabox_positions ) )
-            $this->RegisterPostMetaSave();
+        if( $this->View( $this->CurrentSlug() )->type == 'metabox' && !empty( $this->View( $this->CurrentSlug() )->metabox_positions ) )
+            add_action( 'save_post', array( $this, 'RegisterPostMetaSave' ) );
+    }
+
+    function GetMeta( $post_id )
+    {
+        return get_post_meta( $post_id, $this->class_name, true );
     }
 }

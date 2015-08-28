@@ -79,6 +79,7 @@ class Helpers
     protected function addDefaultHelpers()
     {
         $this->add('if', new Helper\IfHelper());
+        $this->add('if_eq', new Helper\IfEqHelper());
         $this->add('each', new Helper\EachHelper());
         $this->add('unless', new Helper\UnlessHelper());
         $this->add('with', new Helper\WithHelper());

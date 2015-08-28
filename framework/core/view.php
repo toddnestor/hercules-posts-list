@@ -9,8 +9,19 @@ class HercView extends HercAbstract
         $this->class_name = empty( $this->class_name ) ? __CLASS__ : $this->class_name;
     }
 
-    function Render()
+    function Render( $data = array() )
     {
+        if( !empty( $data ) )
+        {
+            if( is_object( $data ) && property_exists( $data, 'post_title' ) && property_exists( $data, 'ID' ) )
+                $meta_data = maybe_unserialize( $this->Model( $this->CurrentSlug() )->GetMeta( $data->ID ) );
+
+            if( !array( $meta_data ) )
+                $meta_data = array( $meta_data );
+
+            $this->data = array_merge( $this->data, $meta_data );
+        }
+
         if( file_exists( $this->directory . DIRECTORY_SEPARATOR . $this->template ) )
         {
             $template = file_get_contents( $this->directory . DIRECTORY_SEPARATOR . $this->template );

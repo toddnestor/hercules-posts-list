@@ -34,7 +34,7 @@ class HercView_PostSettings extends HercView
     {
         $select_box_options = array();
 
-        $category_list = get_categories( array() );
+        $category_list = get_categories( array( 'hide_empty' => 0 ) );
 
         foreach ($category_list as $key => $val)
         {
