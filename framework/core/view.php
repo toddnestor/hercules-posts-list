@@ -19,6 +19,9 @@ class HercView extends HercAbstract
             if( !array( $meta_data ) )
                 $meta_data = array( $meta_data );
 
+            if( empty( $meta_data ) )
+                $meta_data = array();
+
             $this->data = array_merge( $this->data, $meta_data );
         }
 
@@ -27,9 +30,20 @@ class HercView extends HercAbstract
             $template = file_get_contents( $this->directory . DIRECTORY_SEPARATOR . $this->template );
 
             $template = $this->Helper( 'handlebars' )->Render( $template, ( !empty( $this->data ) ? $this->data : array() ) );
+
+            $template = preg_replace_callback(
+                '`name="([^"]*)"`',
+                array( $this, 'AddClassNameToPostNames' ),
+                $template
+            );
             
             echo $template;
         }
+    }
+
+    function AddClassNameToPostNames( $matches )
+    {
+        return 'name="' . $this->Model( $this->CurrentSlug() )->class_name . '[' . $matches[1] . ']"';
     }
 
     function EnqueueScript( $script )
