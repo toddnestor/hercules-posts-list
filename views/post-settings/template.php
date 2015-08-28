@@ -1,8 +1,8 @@
 <div class="herc-bootstrap" id="herc_posts_list">
     <div class="checkbox">
         <label>
-            <input type="hidden" name="show_herc_posts_list" value="false" />
-            <input type="checkbox" name="show_herc_posts_list" value="true" {{#if show_posts_list}}checked{{/if}} /> Show
+            <input type="hidden" name="{{class_name}}[show_herc_posts_list]" value="false" />
+            <input type="checkbox" name="{{class_name}}[show_herc_posts_list]" value="true" {{#if show_posts_list}}checked{{/if}} /> Show
         </label>
     </div>
     <div class="form-group">

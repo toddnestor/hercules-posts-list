@@ -62,6 +62,34 @@ abstract class HercAbstract
         return str_replace( ' ', '', ucwords( str_replace( array( '_', '-' ), ' ', $string ) ) );
     }
 
+    function SlugifyCamelCase( $string )
+    {
+        $chars = str_split( $string );
+
+        foreach( $chars as $key=>$val )
+        {
+            if( $val !== strtolower( $val ) )
+                $chars[ $key ] = '-' . strtolower( $val );
+        }
+
+        return trim( implode( '', $chars ), '-' );
+    }
+
+    function SlugFromClassName( $string )
+    {
+        $bits = explode( '_', $string );
+
+        if( !empty( $bits[1] ) )
+            return $this->SlugifyCamelCase( $bits[1] );
+
+        return false;
+    }
+
+    function CurrentSlug()
+    {
+        return $this->SlugFromClassName( $this->class_name );
+    }
+
     /**
      * Returns an instance of a class based on what type it is and what its slug is.
      * @param String $type This can be helper, model, controller, or view depending on what kind of object you are looking for.

@@ -6,15 +6,14 @@ class HercView extends HercAbstract
     {
         $this->template = empty( $this->template ) ? 'template.php' : $this->template;
         $this->name = empty( $this->name ) ? '' : $this->name;
-
-        $this->Initialize();
+        $this->class_name = empty( $this->class_name ) ? __CLASS__ : $this->class_name;
     }
 
     function Render()
     {
         if( file_exists( $this->directory . DIRECTORY_SEPARATOR . $this->template ) )
         {
-            $template = file_get_contents($this->directory . DIRECTORY_SEPARATOR . $this->template);
+            $template = file_get_contents( $this->directory . DIRECTORY_SEPARATOR . $this->template );
 
             echo $this->Helper( 'handlebars' )->Render( $template, ( !empty( $this->data ) ? $this->data : array() ) );
         }
@@ -43,6 +42,8 @@ class HercView extends HercAbstract
 
     function RegisterMetaboxes()
     {
+        $this->data['class_name'] = $this->Model( $this->CurrentSlug() )->class_name;
+
         foreach( $this->metabox_positions as $key=>$val )
         {
             if( !empty( $val['post_type'] ) )
@@ -59,7 +60,7 @@ class HercView extends HercAbstract
 
     function Initialize()
     {
-        if( $this->type = 'metabox' && !empty( $this->metabox_positions ) )
+        if( $this->type == 'metabox' && !empty( $this->metabox_positions ) )
             add_action( 'add_meta_boxes', array( $this, 'RegisterMetaboxes' ) );
     }
 }

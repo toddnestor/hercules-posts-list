@@ -17,3 +17,5 @@ if( !defined( 'ABSPATH' ) )
 require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR . 'start.php' );
 
 $herc_posts = new HercFramework;
+
+$herc_posts->InitiateAll();

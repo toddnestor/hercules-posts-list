@@ -12,7 +12,7 @@ class HercFramework extends HercAbstract
 {
     function __construct()
     {
-        $this->InitiateAll();
+
     }
 
     /**
@@ -46,7 +46,12 @@ class HercFramework extends HercAbstract
                     foreach( $files as $key3=>$val3 )
                     {
                         if( strpos( $val3, '.' ) === false )
-                            $this->InitiateClass( $val, $val3 );
+                        {
+                            $object = $this->InitiateClass( $val, $val3 );
+
+                            if( method_exists( $object, 'Initialize' ) )
+                                $object->Initialize();
+                        }
                     }
                 }
             }
