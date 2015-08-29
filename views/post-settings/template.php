@@ -2,7 +2,7 @@
     <div class="checkbox">
         <label>
             <input type="hidden" name="show_herc_posts_list" value="false" />
-            <input type="checkbox" name="show_herc_posts_list" value="true" {{#if show_herc_posts_list}}checked{{/if}} /> Show
+            <input type="checkbox" name="show_herc_posts_list" value="true" {{#if_eq show_herc_posts_list "true"}}checked{{/if_eq}} /> Show
         </label>
     </div>
     <div class="form-group">

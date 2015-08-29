@@ -12,6 +12,8 @@ class HercView extends HercAbstract
 
     function Render( $data = array(), $return = false )
     {
+        if( !is_bool( $return ) )
+            $return = false;
         if( !empty( $data ) )
         {
             if( is_object( $data ) && property_exists( $data, 'post_title' ) && property_exists( $data, 'ID' ) )
@@ -91,7 +93,7 @@ class HercView extends HercAbstract
 
     function PostFilter( $content )
     {
-        if( method_exists( $this, 'GenerateData' ) )
+        if( method_exists( $this, 'GenerateData' ) && ( !property_exists( $this, 'posts_data_generated' ) || $this->posts_data_generated != true ) )
             $this->GenerateData();
 
         $html = $this->Render( array(), true );
@@ -117,6 +119,8 @@ class HercView extends HercAbstract
             if ( !empty( $post ) && is_object( $post ) && property_exists( $post, 'ID' ) )
                 $this->data = array_merge( $this->data, $this->Model('post-settings')->GetMeta($post->ID) );
         }
+
+        $this->posts_data_generated = true;
     }
 
     function Initialize()
