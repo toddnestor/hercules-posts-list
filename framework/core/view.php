@@ -117,7 +117,17 @@ class HercView extends HercAbstract
                 $this->data = array( $this->data );
 
             if ( !empty( $post ) && is_object( $post ) && property_exists( $post, 'ID' ) )
-                $this->data = array_merge( $this->data, $this->Model('post-settings')->GetMeta($post->ID) );
+            {
+                $meta_data = $this->Model('post-settings')->GetMeta($post->ID);
+
+                if( !is_array( $meta_data ) )
+                    $meta_data = array( $meta_data );
+
+                if( empty( $meta_data ) )
+                    $meta_data = array();
+
+                $this->data = array_merge($this->data, $meta_data );
+            }
         }
 
         $this->posts_data_generated = true;

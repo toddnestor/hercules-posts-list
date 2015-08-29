@@ -60,25 +60,23 @@ class HercView_PostsList extends HercView
                     'type' => 'plain'
                 );
 
-                $pagination_links = paginate_links($pagination);
+                $this->data['pagination'] = paginate_links($pagination);
 
-                $category_list .= $pagination_links;
+                $this->data['posts'] = array();
 
                 while ( $shons_query->have_posts() ):
 
                     $shons_query->the_post();
 
-                    $category_list .= '<h2><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h2>';
-
                     $excerpt = isset( $this->data['max_excerpt_length']) && is_numeric( $this->data['max_excerpt_length'] ) && $this->data['max_excerpt_length'] > 0 ? $this->Helper('string')->LimitText( get_the_excerpt(), $this->data['max_excerpt_length'] ) : get_the_excerpt();
 
-                    $category_list .= $this->data['show_herc_posts_list_excerpt'] == 'true' ? '<p>' . $excerpt . ' <a href="' . get_the_permalink() . '">Read more</a></p>' : '';
+                    $this->data['posts'][] = array(
+                        'permalink'     => get_the_permalink(),
+                        'title'         => get_the_title(),
+                        'excerpt'       => $excerpt
+                    );
 
                 endwhile;
-
-                $category_list .= $pagination_links;
-
-                echo $category_list;
             endif;
         }
     }
