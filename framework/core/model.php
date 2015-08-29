@@ -30,6 +30,6 @@ class HercModel extends HercAbstract
 
     function GetMeta( $post_id )
     {
-        return get_post_meta( $post_id, $this->class_name, true );
+        return maybe_unserialize( get_post_meta( $post_id, $this->class_name, true ) );
     }
 }

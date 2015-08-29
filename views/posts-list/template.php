@@ -1,0 +1,1 @@
+hi there {{posts_to_show}} and here

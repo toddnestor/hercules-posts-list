@@ -4,17 +4,18 @@ class HercView extends HercAbstract
 {
     function __construct()
     {
-        $this->template = empty( $this->template ) ? 'template.php' : $this->template;
-        $this->name = empty( $this->name ) ? '' : $this->name;
-        $this->class_name = empty( $this->class_name ) ? __CLASS__ : $this->class_name;
+        $this->template = !property_exists( $this, 'template' ) || empty( $this->template ) ? 'template.php' : $this->template;
+        $this->name = !property_exists( $this, 'name' ) || empty( $this->name ) ? '' : $this->name;
+        $this->class_name = !property_exists( $this, 'class_name' ) || empty( $this->class_name ) ? __CLASS__ : $this->class_name;
+        $this->model = !property_exists( $this, 'model' ) || empty( $this->model ) ? $this->CurrentSlug() : $this->model;
     }
 
-    function Render( $data = array() )
+    function Render( $data = array(), $return = false )
     {
         if( !empty( $data ) )
         {
             if( is_object( $data ) && property_exists( $data, 'post_title' ) && property_exists( $data, 'ID' ) )
-                $meta_data = maybe_unserialize( $this->Model( $this->CurrentSlug() )->GetMeta( $data->ID ) );
+                $meta_data = $this->Model( $this->CurrentSlug() )->GetMeta( $data->ID );
 
             if( !array( $meta_data ) )
                 $meta_data = array( $meta_data );
@@ -37,7 +38,10 @@ class HercView extends HercAbstract
                 $template
             );
             
-            echo $template;
+            if( !$return )
+                echo $template;
+            else
+                return $template;
         }
     }
 
@@ -85,9 +89,41 @@ class HercView extends HercAbstract
         }
     }
 
+    function PostFilter( $content )
+    {
+        if( method_exists( $this, 'GenerateData' ) )
+            $this->GenerateData();
+
+        $html = $this->Render( array(), true );
+
+        if( $this->location == 'before' )
+            return $html . $content;
+        else
+            return $content . $html;
+    }
+
+    function GenerateData()
+    {
+        if( is_object( $this->Model( $this->model ) ) )
+        {
+            global $post;
+
+            if( !property_exists( $this, 'data' ) )
+                $this->data = array();
+
+            if( !is_array( $this->data ) )
+                $this->data = array( $this->data );
+
+            if ( !empty( $post ) && is_object( $post ) && property_exists( $post, 'ID' ) )
+                $this->data = array_merge( $this->data, $this->Model('post-settings')->GetMeta($post->ID) );
+        }
+    }
+
     function Initialize()
     {
         if( $this->type == 'metabox' && !empty( $this->metabox_positions ) )
             add_action( 'add_meta_boxes', array( $this, 'RegisterMetaboxes' ) );
+        elseif( $this->type == 'post-add-on' )
+            add_filter( 'the_content', array( $this, 'PostFilter' ) );
     }
 }
