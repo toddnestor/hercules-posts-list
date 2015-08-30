@@ -68,11 +68,13 @@ class HercView_PostsList extends HercView
 
                     $shons_query->the_post();
 
+                    global $post;
+
                     $excerpt = isset( $this->data['max_excerpt_length']) && is_numeric( $this->data['max_excerpt_length'] ) && $this->data['max_excerpt_length'] > 0 ? $this->Helper('string')->LimitText( get_the_excerpt(), $this->data['max_excerpt_length'] ) : get_the_excerpt();
 
                     $this->data['posts'][] = array(
                         'permalink'     => get_the_permalink(),
-                        'title'         => get_the_title(),
+                        'title'         => $post->post_title,
                         'excerpt'       => $excerpt
                     );
 

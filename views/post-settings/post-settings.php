@@ -4,10 +4,10 @@ class HercView_PostSettings extends HercView
 {
     function __construct()
     {
-        $this->directory = dirname( __FILE__ );
-        $this->name = 'Display Post List';
-        $this->type = 'metabox';
-        $this->class_name = __CLASS__;
+        $this->directory         = dirname( __FILE__ );
+        $this->name              = 'Display Post List';
+        $this->type              = 'metabox';
+        $this->class_name        = __CLASS__;
         $this->metabox_positions = array(
             array(
                 'post_type' => 'page',
@@ -36,7 +36,7 @@ class HercView_PostSettings extends HercView
 
         $category_list = get_categories( array( 'hide_empty' => 0 ) );
 
-        foreach ($category_list as $key => $val)
+        foreach( $category_list as $key => $val )
         {
             $select_box_options[] = array(
                 'id' => $val->term_id,
