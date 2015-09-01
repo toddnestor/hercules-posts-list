@@ -1,16 +1,3 @@
-Hercules Posts List
-===================
-
-
-
-To do for future updates:
-  - [ ] Allow multiple categories
-  - [ ] Ability to choose hierarchy for those categories
-  - [ ] ability to customize the template used for the list
-  - [ ] Title option for the section that displays the list
-  - [ ] provide the option on posts as well
-  - [ ] ability to choose tags also (not just categories)
-
 === Hercules Posts List ===
 Contributors: toddnestor
 Tags: hercules,categories,posts list
