@@ -1,6 +1,8 @@
 <?php
 
-class HercView_PostSettings extends HercView
+use Hercules\View;
+
+class HercView_PostSettings extends View
 {
     function __construct()
     {

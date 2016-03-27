@@ -1,6 +1,8 @@
 <?php
 
-class HercModel_PostSettings extends HercModel
+use Hercules\Model;
+
+class HercModel_PostSettings extends Model
 {
     function __construct()
     {
