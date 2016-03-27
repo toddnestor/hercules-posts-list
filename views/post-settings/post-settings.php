@@ -32,6 +32,11 @@ class HercView_PostSettings extends View
         parent::__construct();
     }
 
+	/**
+	 * Gets an array of the categories to generate the dropdown options for the metabox.
+	 *
+	 * @return array Array of arrays that contain the category id and name.
+	 */
     function GetTheCategoryArray()
     {
         $select_box_options = array();
