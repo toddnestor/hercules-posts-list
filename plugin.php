@@ -4,7 +4,7 @@ Plugin Name: Hercules Posts List
 Author: Todd Nestor
 Author URI: http://toddnestor.com
 Description: Adds a list of posts in a category to the bottom of a page with a title of the same name as the category
-Version: 1.2.0
+Version: 1.2.1
 License: GNU General Public License v3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 */
