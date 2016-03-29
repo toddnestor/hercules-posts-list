@@ -76,7 +76,7 @@ class HercView_PostsList extends View
 						global $post;
 
 						$excerpt = $this->Helper( 'string' )
-							->LimitText( ( empty( $post->post_excerpt ) ? $post->post_content : $post->post_excerpt ), 100 );
+							->LimitText( ( empty( $post->post_excerpt ) ? strip_tags( $post->post_content ) : $post->post_excerpt ), 100 );
 
 						if( isset( $this->data[ 'max_excerpt_length' ] ) && is_numeric( $this->data[ 'max_excerpt_length' ] ) && $this->data[ 'max_excerpt_length' ] > 0 )
 							$excerpt = $this->Helper( 'string' )

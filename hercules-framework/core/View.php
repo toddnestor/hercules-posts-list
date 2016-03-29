@@ -287,7 +287,7 @@ class View extends HercAbstract
 		if( $this->Model( $slug ) )
         	$meta_data = $this->Model( $this->CurrentSlug() )->GetMeta( $post_id );
 		else
-			$meta_data = [];
+			$meta_data = array();
 
         $custom_columns = $this->PostsColumns();
 
@@ -318,7 +318,7 @@ class View extends HercAbstract
 		if( $this->Model( $slug ) )
 			$meta_data = $this->Model( $this->CurrentSlug() )->GetMeta( $post_id );
 		else
-			$meta_data = [];
+			$meta_data = array();
 
 		$custom_columns = $this->CommentsColumns();
 
