@@ -419,7 +419,7 @@ class View extends HercAbstract
 		{
 			case 'all':
 				$post_types = get_post_types( '', 'names' );
-				$exclude_types = [ 'attachment', 'revision', 'nav_menu_item' ];
+				$exclude_types = array( 'attachment', 'revision', 'nav_menu_item' );
 				foreach( $post_types as $type )
 				{
 					if( !in_array( $type, $exclude_types ) )
